@@ -101,11 +101,10 @@ public void shutdown() {
         //尝试终止
         tryTerminate();
     }
-        
 }
 ```
 - RUNNING 或者 SHURDOWN->STOP:调用
-```$xslt
+```
 public List<Runnable> shutdownNow() {
         List<Runnable> tasks;
         final ReentrantLock mainLock = this.mainLock;
@@ -130,7 +129,7 @@ public List<Runnable> shutdownNow() {
 - SHUTDOWN -> TIDYING：当队列和线程池为空 
 - STOP -> TIDYING ：当线程池为空 
 - TIDYING -> TERMINATED ：当terminated()钩子方法执行完成 
-```$xslt
+```
 final void tryTerminate() {
         for (;;) {
             //获取当前线程池，线程数
@@ -172,30 +171,6 @@ final void tryTerminate() {
 execute方法：
 ```
 public void execute(Runnable command) {
-        if (command == null)
-            throw new NullPointerException();
-        /*
-         * Proceed in 3 steps:
-         *
-         * 1. If fewer than corePoolSize threads are running, try to
-         * start a new thread with the given command as its first
-         * task.  The call to addWorker atomically checks runState and
-         * workerCount, and so prevents false alarms that would add
-         * threads when it shouldn't, by returning false.
-         *
-         * 2. If a task can be successfully queued, then we still need
-         * to double-check whether we should have added a thread
-         * (because existing ones died since last checking) or that
-         * the pool shut down since entry into this method. So we
-         * recheck state and if necessary roll back the enqueuing if
-         * stopped, or start a new thread if there are none.
-         * 如果任务能添加进队列，我们仍然需要进行双重检查
-         *
-         * 3. If we cannot queue task, then we try to add a new
-         * thread.  If it fails, we know we are shut down or saturated
-         * and so reject the task.
-         * 如果我们没有任务，可以尝试添加一个线程，如果添加失败，使用拒绝策略
-         */
         int c = ctl.get();
         //当前线程数与核心线程比较，小于核心线程
         if (workerCountOf(c) < corePoolSize) {
