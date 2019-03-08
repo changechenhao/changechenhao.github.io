@@ -15,7 +15,7 @@ tags:
 在并发很大的情况下，频繁创建线程与销毁线程会带来很大的消耗，线程池就是在解决这个问题的。
 
 
-## 线程构造函数意义
+## 线程构造函数
 ```
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
@@ -25,7 +25,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
 ``` 
-
+###各参数的意义
 - corePoolSize:核心线程的数量
 - maximumPoolSize:最大线程数
 - keepAliveTime:闲置线程被回收的时间限制 
@@ -34,6 +34,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - threadFactory:线程工厂,用来给线程去个有意义的名字
 - handler:拒绝策略，即当加入线程失败，采用该handler来处理
 
+###corePoolSize与maximumPoolSize
 当我们看到corePoolSize与maximumPoolSize的时候，可能会感到疑惑，那么当前线程数poolSize与
 corePoolSize和maximumPoolSize有什么关系呢？
 当新提交一个任务时：
@@ -71,6 +72,7 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 //一般用于设置状态并转移线程数，用于advanceRunState方法中。
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
+### 线程池的5个状态
 上面的代码是在jdk11里的，线程的池的状态有上面的RUNNING、SHUTDOWN、STOP、TIDYING、TERMINATED
 五种状态，他们都是用高三位在储存线程池的状态，以剩下的29位数来储存当前线程数，即最大线程数位2的29次方-1。
 
@@ -80,7 +82,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 - TIDYING:所有任务执行完成。
 - TERMINATED:terminated()已经执行完成。 
 
-状态间的相互转换：
+### 状态间的相互转换：
 - RUNNING -> SHUTDOWN:可以调用 shutdown 方法
 ```
 public void shutdown() {
@@ -103,7 +105,7 @@ public void shutdown() {
     }
 }
 ```
-- RUNNING 或者 SHURDOWN->STOP:调用
+- RUNNING 或者 SHURDOWN->STOP:调用shutdownNow
 ```
 public List<Runnable> shutdownNow() {
         List<Runnable> tasks;
@@ -168,7 +170,9 @@ final void tryTerminate() {
         }
     }
 ```
-execute方法：
+
+## 源码分析
+### execute源码分析
 ```
 public void execute(Runnable command) {
         int c = ctl.get();
@@ -182,7 +186,7 @@ public void execute(Runnable command) {
         //判断线程池状态是否为RUNNING与向队列添加任务
         if (isRunning(c) && workQueue.offer(command)) {
             int recheck = ctl.get();
-            //双重检查，状态不为RUNNING,且移除任务成功
+            //双重检查，如果状态不为RUNNING且移除任务成功
             if (! isRunning(recheck) && remove(command))
                 //使用拒绝策略
                 reject(command);
@@ -194,7 +198,7 @@ public void execute(Runnable command) {
             reject(command);
     }
 ```
-addWorker
+### addWorker源码分析
 
 
 
