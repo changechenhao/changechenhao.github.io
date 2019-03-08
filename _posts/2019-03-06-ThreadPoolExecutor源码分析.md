@@ -45,6 +45,7 @@ corePoolSize 和 maximumPoolSize 有什么关系呢？
 
 
 ## 线程池状态
+### 常量与状态的源码
 ```
 //高3位保存线程池状态，低29位保存线程数
 private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
@@ -73,8 +74,8 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
 ### 线程池的5个状态
-上面的代码是在jdk11里的，线程的池的状态有上面的 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
-五种状态，他们都是用高三位在储存线程池的状态，以剩下的29位数来储存当前线程数，即最大线程数位2的29次方-1。
+上面的代码是在jdk11里的，线程的池的状态有 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
+这五种状态，他们都是使用int的高3位来储存线程池的状态，以低29位数来储存线程数，即最大线程数位2的29次方-1。
 
 - RUNNING :接受新的任务并且处理队列的任务。
 - SHUTDOWN :不接受任务，但处理已经进入队列的任务。
@@ -82,7 +83,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 - TIDYING :所有任务执行完成。
 - TERMINATED : terminated() 已经执行完成。 
 
-### 状态间的相互转换：
+### 状态间的相互转换
 - RUNNING -> SHUTDOWN:可以调用 shutdown 方法
 ```
 public void shutdown() {
