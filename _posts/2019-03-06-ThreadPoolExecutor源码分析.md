@@ -25,7 +25,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
 ``` 
-###各参数的意义
+### 各参数的意义
 - corePoolSize:核心线程的数量
 - maximumPoolSize:最大线程数
 - keepAliveTime:闲置线程被回收的时间限制 
@@ -34,7 +34,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - threadFactory:线程工厂,用来给线程去个有意义的名字
 - handler:拒绝策略，即当加入线程失败，采用该handler来处理
 
-###corePoolSize与maximumPoolSize
+### corePoolSize与maximumPoolSize
 当我们看到corePoolSize与maximumPoolSize的时候，可能会感到疑惑，那么当前线程数poolSize与
 corePoolSize和maximumPoolSize有什么关系呢？
 当新提交一个任务时：
