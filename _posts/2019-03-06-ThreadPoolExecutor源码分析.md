@@ -35,12 +35,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - handler:拒绝策略，即当加入线程失败，采用该handler来处理
 
 当我们看到corePoolSize与maximumPoolSize的时候，可能会感到疑惑，那么当前线程数poolSize与
-corePoolSize和maximumPoolSize有什么关系呢？Detecting the transition from SHUTDOWN to TIDYING is less
-     * straightforward than you'd like because the queue may become
-     * empty after non-empty and vice versa during SHUTDOWN state, but
-     * we can only terminate if, after seeing that it is empty, we see
-     * that workerCount is 0 (which sometimes entails a recheck -- see
-     * below).
+corePoolSize和maximumPoolSize有什么关系呢？
 当新提交一个任务时：
 - 如果poolSize<corePoolSize，新增加一个线程处理新的任务。
 - 如果poolSize=corePoolSize，新任务会被放入阻塞队列等待。
