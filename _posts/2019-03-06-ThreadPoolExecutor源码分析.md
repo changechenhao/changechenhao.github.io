@@ -26,22 +26,22 @@ public ThreadPoolExecutor(int corePoolSize,
                           RejectedExecutionHandler handler)
 ``` 
 ### 各参数的意义
-- corePoolSize:核心线程的数量
-- maximumPoolSize:最大线程数
-- keepAliveTime:闲置线程被回收的时间限制 
-- unit:时间单位（ms、us什么的）
-- workQueue:消息队列（存储没有线程的任务，存储的任务需等待其他任务完成释放的线程）
-- threadFactory:线程工厂,用来给线程去个有意义的名字
-- handler:拒绝策略，即当加入线程失败，采用该handler来处理
+- corePoolSize :核心线程的数量
+- maximumPoolSize :最大线程数
+- keepAliveTime :闲置线程被回收的时间限制 
+- unit :时间单位（ms、us什么的）
+- workQueue :消息队列（存储没有线程的任务，存储的任务需等待其他任务完成释放的线程）
+- threadFactory :线程工厂,用来给线程去个有意义的名字
+- handler :拒绝策略，即当加入线程失败，采用该 handler 来处理
 
-### corePoolSize与maximumPoolSize
-当我们看到corePoolSize与maximumPoolSize的时候，可能会感到疑惑，那么当前线程数poolSize与
-corePoolSize和maximumPoolSize有什么关系呢？
+### corePoolSize 与 maximumPoolSize 
+当我们看到 corePoolSize 与 maximumPoolSize 的时候，可能会感到疑惑，那么当前线程数 poolSize 与
+corePoolSize 和 maximumPoolSize 有什么关系呢？
 当新提交一个任务时：
-- 如果poolSize<corePoolSize，新增加一个线程处理新的任务。
-- 如果poolSize=corePoolSize，新任务会被放入阻塞队列等待。
-- 如果阻塞队列的容量达到上限，且这时poolSize<maximumPoolSize，新增线程来处理任务。
-- 如果阻塞队列满了，且poolSize=maximumPoolSize，那么线程池已经达到极限，会根据饱和策略RejectedExecutionHandler拒绝新的任务。
+- 如果 poolSize < corePoolSize，新增加一个线程处理新的任务。
+- 如果 poolSize = corePoolSize，新任务会被放入阻塞队列等待。
+- 如果阻塞队列的容量达到上限，且这时 poolSize < maximumPoolSize，新增线程来处理任务。
+- 如果阻塞队列满了，且 poolSize = maximumPoolSize，那么线程池已经达到极限，会根据饱和策略 RejectedExecutionHandler 拒绝新的任务。
 
 
 ## 线程池状态
@@ -73,14 +73,14 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
 ### 线程池的5个状态
-上面的代码是在jdk11里的，线程的池的状态有上面的RUNNING、SHUTDOWN、STOP、TIDYING、TERMINATED
+上面的代码是在jdk11里的，线程的池的状态有上面的 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
 五种状态，他们都是用高三位在储存线程池的状态，以剩下的29位数来储存当前线程数，即最大线程数位2的29次方-1。
 
-- RUNNING:接受新的任务并且处理队列的任务。
-- SHUTDOWN:不接受任务，但处理已经进入队列的任务。
-- STOP:不接受新任务，也不处理队列里的任务，并且中断正在执行的任务。
-- TIDYING:所有任务执行完成。
-- TERMINATED:terminated()已经执行完成。 
+- RUNNING :接受新的任务并且处理队列的任务。
+- SHUTDOWN :不接受任务，但处理已经进入队列的任务。
+- STOP :不接受新任务，也不处理队列里的任务，并且中断正在执行的任务。
+- TIDYING :所有任务执行完成。
+- TERMINATED : terminated() 已经执行完成。 
 
 ### 状态间的相互转换：
 - RUNNING -> SHUTDOWN:可以调用 shutdown 方法
@@ -105,7 +105,7 @@ public void shutdown() {
     }
 }
 ```
-- RUNNING 或者 SHURDOWN->STOP:调用shutdownNow
+- RUNNING 或者 SHURDOWN -> STOP:调用 shutdownNow
 ```
 public List<Runnable> shutdownNow() {
         List<Runnable> tasks;
