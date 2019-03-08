@@ -37,6 +37,7 @@ public ThreadPoolExecutor(int corePoolSize,
 ### corePoolSize 与 maximumPoolSize 
 当我们看到 corePoolSize 与 maximumPoolSize 的时候，可能会感到疑惑，那么当前线程数 poolSize 与
 corePoolSize 和 maximumPoolSize 有什么关系呢？
+
 当新提交一个任务时：
 - 如果 poolSize < corePoolSize，新增加一个线程处理新的任务。
 - 如果 poolSize = corePoolSize，新任务会被放入阻塞队列等待。
@@ -76,7 +77,6 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 ### 线程池的5个状态
 上面的代码是在jdk11里的，线程的池的状态有 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
 这五种状态，他们都是使用int的高3位来储存线程池的状态，以低29位数来储存线程数，即最大线程数位2的29次方-1。
-
 - RUNNING :接受新的任务并且处理队列的任务。
 - SHUTDOWN :不接受任务，但处理已经进入队列的任务。
 - STOP :不接受新任务，也不处理队列里的任务，并且中断正在执行的任务。
