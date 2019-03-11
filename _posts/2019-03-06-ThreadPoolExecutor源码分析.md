@@ -81,7 +81,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
 ### 线程池的5个状态
 
-上面的代码是在jdk11里的，线程的池的状态有 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
+上面的代码是在jdk11里的，线程的池的状态有 `RUNNING`、 `SHUTDOWN`、 `STOP`、 `TIDYING`、 `TERMINATED`
 这五种状态，他们都是使用int的高3位来储存线程池的状态，以低29位数来储存线程数，即最大线程数位2的29次方-1。
 - RUNNING :接受新的任务并且处理队列的任务。
 - SHUTDOWN :不接受任务，但处理已经进入队列的任务。
@@ -91,11 +91,11 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 
 ### 状态间的相互转换
 
-- RUNNING -> SHUTDOWN:可以调用 shutdown 方法
-- RUNNING 或者 SHURDOWN -> STOP:调用 shutdownNow
-- SHUTDOWN -> TIDYING：当队列和线程池为空 
-- STOP -> TIDYING ：当线程池为空 
-- TIDYING -> TERMINATED ：当terminated()钩子方法执行完成 
+- `RUNNING` -> `SHUTDOWN`:可以调用 shutdown 方法
+- `RUNNING` 或者 `SHURDOWN` -> STOP:调用 shutdownNow
+- `SHUTDOWN` -> `TIDYING`：当队列和线程池为空 
+- `STOP` -> `TIDYING` ：当线程池为空 
+- `TIDYING` -> `TERMINATED` ：当terminated()钩子方法执行完成 
 ```
 public void shutdown() {
         //上锁
@@ -305,11 +305,11 @@ private boolean addWorker(Runnable firstTask, boolean core) {
 
 ## 拒绝策略
 
-- CallerRunsPolicy：
-- AbortPolicy：直接抛异常
-- DiscardPolicy：不处理
-- DiscardOldestPolicy：去除队列中的一个，执行execute方法
-- 其他：可以实现RejectedExecutionHandler接口，自定义拒绝策略
+- `CallerRunsPolicy`：直接在本线程运行
+- `AbortPolicy`：直接抛异常
+- `DiscardPolicy`：不处理
+- `DiscardOldestPolicy`：去除队列中的一个，执行 `execute` 方法
+- 其他：可以实现 `RejectedExecutionHandler` 接口，自定义拒绝策略
 
 ## 不同线程池的优劣
 
