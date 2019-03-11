@@ -4,7 +4,7 @@ title:      ThreadPoolExecutor线程池源码分析
 subtitle:   ThreadPoolExecutor
 date:       2019-03-06
 author:     BY
-header-img: img/post-bg-cook.jpg
+header-img: img/threadpool.jpeg
 catalog: true
 tags:
     - ThreadPool
@@ -152,6 +152,7 @@ public List<Runnable> shutdownNow() {
     }
 
 ```
+
 ```
 final void tryTerminate() {
         for (;;) {
