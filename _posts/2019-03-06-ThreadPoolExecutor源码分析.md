@@ -16,6 +16,7 @@ tags:
 
 
 ## 线程构造函数
+
 ```
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
@@ -26,6 +27,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           RejectedExecutionHandler handler)
 ``` 
 ### 各参数的意义
+
 - corePoolSize :核心线程的数量
 - maximumPoolSize :最大线程数
 - keepAliveTime :闲置线程被回收的时间限制 
@@ -35,6 +37,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - handler :拒绝策略，即当加入线程失败，采用该 handler 来处理
 
 ### corePoolSize 与 maximumPoolSize 
+
 当我们看到 corePoolSize 与 maximumPoolSize 的时候，可能会感到疑惑，那么当前线程数 poolSize 与
 corePoolSize 和 maximumPoolSize 有什么关系呢？
 
@@ -46,7 +49,9 @@ corePoolSize 和 maximumPoolSize 有什么关系呢？
 
 
 ## 线程池状态
+
 ### 常量与状态的源码
+
 ```
 //高3位保存线程池状态，低29位保存线程数
 private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
@@ -75,6 +80,7 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
 ### 线程池的5个状态
+
 上面的代码是在jdk11里的，线程的池的状态有 RUNNING、 SHUTDOWN、 STOP、 TIDYING、 TERMINATED
 这五种状态，他们都是使用int的高3位来储存线程池的状态，以低29位数来储存线程数，即最大线程数位2的29次方-1。
 - RUNNING :接受新的任务并且处理队列的任务。
@@ -84,6 +90,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 - TERMINATED : terminated() 已经执行完成。 
 
 ### 状态间的相互转换
+
 - RUNNING -> SHUTDOWN:可以调用 shutdown 方法
 - RUNNING 或者 SHURDOWN -> STOP:调用 shutdownNow
 - SHUTDOWN -> TIDYING：当队列和线程池为空 
@@ -186,7 +193,9 @@ final void tryTerminate() {
 ```
 
 ## 源码分析
+
 ### execute源码分析
+
 ```
 public void execute(Runnable command) {
     int c = ctl.get();
@@ -215,6 +224,7 @@ public void execute(Runnable command) {
 ```
 
 ### addWorker源码分析
+
 ```
 private boolean addWorker(Runnable firstTask, boolean core) {
         retry:
@@ -294,20 +304,23 @@ private boolean addWorker(Runnable firstTask, boolean core) {
 ```
 
 ## 拒绝策略
+
 - CallerRunsPolicy：
 - AbortPolicy：直接抛异常
 - DiscardPolicy：不处理
 - DiscardOldestPolicy：去除队列中的一个，执行execute方法
 - 其他：可以实现RejectedExecutionHandler接口，自定义拒绝策略
+
 ## 不同线程池的优劣
 
 ## 关于线程池状态的思考
+
 - 2019/03/06：为什么不把状态与线程数分开？为什么不用byte或者String来存储状态，用int来存储？
 - 2019/03/09:addWorker的if (isRunning(c) ||(runStateLessThan(c, STOP) && firstTask == null))
 为什么允许SHOTDOWN状态时添加任务？
 
 ## 参考
-链接 ： [](https://blog.csdn.net/cleverGump/article/details/50688008)
+链接 ： [https://blog.csdn.net/cleverGump/article/details/50688008]()
 
 
 
