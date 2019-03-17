@@ -26,7 +26,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
 ``` 
-### 各参数的意义
+#### 各参数的意义
 
 - corePoolSize :核心线程的数量
 - maximumPoolSize :最大线程数
@@ -36,7 +36,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - threadFactory :线程工厂,用来给线程取个有意义的名字
 - handler :拒绝策略，即当加入线程失败，采用该 handler 来处理
 
-### corePoolSize 与 maximumPoolSize 
+#### corePoolSize 与 maximumPoolSize 
 
 当我们看到 corePoolSize 与 maximumPoolSize 的时候，可能会感到疑惑，那么当前线程数 poolSize 与
 corePoolSize 和 maximumPoolSize 有什么关系呢？
@@ -50,7 +50,7 @@ corePoolSize 和 maximumPoolSize 有什么关系呢？
 
 ## 线程池状态
 
-### 常量与状态的源码
+#### 常量与状态的源码
 
 ```
 //高3位保存线程池状态，低29位保存线程数
@@ -79,7 +79,7 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 //一般用于设置状态并转移线程数，用于advanceRunState方法中。
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
-### 线程池的5个状态
+#### 线程池的5个状态
 
 上面的代码是在jdk11里的，线程的池的状态有 `RUNNING`、 `SHUTDOWN`、 `STOP`、 `TIDYING`、 `TERMINATED`
 这五种状态，他们都是使用int的高3位来储存线程池的状态，以低29位数来储存线程数，即最大线程数位2的29次方-1。
@@ -89,7 +89,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 - TIDYING :所有任务执行完成。
 - TERMINATED : terminated() 已经执行完成。 
 
-### 状态间的相互转换
+#### 状态间的相互转换
 
 - `RUNNING` -> `SHUTDOWN`:可以调用 shutdown 方法
 - `RUNNING` 或者 `SHURDOWN` -> STOP:调用 shutdownNow
@@ -182,9 +182,7 @@ final void tryTerminate() {
     }
 ```
 
-## 源码分析
-
-### execute源码分析
+## execute源码分析
 
 execute()方法主要分为以下四种情况: 
 - 情况1: 如果线程池内的有效线程数少于核心线程数 corePoolSize, 那么就创建并启动一个线程来
@@ -225,7 +223,7 @@ public void execute(Runnable command) {
 
 ```
 
-### addWorker源码分析
+#### addWorker源码分析
 
 ```
 private boolean addWorker(Runnable firstTask, boolean core) {
@@ -305,7 +303,7 @@ private boolean addWorker(Runnable firstTask, boolean core) {
     }
 ```
 
-### 线程消费队列里任务
+## 线程消费队列里任务
 
 `ThreadPoolExecutor`里`Worker`是线程的承载者，它继承与`AQS`,实现了`Runnable`的 run（）方法.
 
@@ -451,7 +449,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
 public static ExecutorService newCachedThreadPool() {
     return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                                   60L, TimeUnit.SECONDS,
-                                  new SynchronousQueue<Runnable>());
+                                  new Synchrono　usQueue<Runnable>());
 }
 ```
 newSingleThreadExecutor 与 newScheduleThreadPool 分别被 FinalizableDelegatedExecutorService 与
