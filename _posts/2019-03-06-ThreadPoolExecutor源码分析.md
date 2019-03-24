@@ -17,7 +17,7 @@ tags:
 
 ## 线程构造函数
 
-```
+```html
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
                           long keepAliveTime,
@@ -79,6 +79,7 @@ private static int workerCountOf(int c)  { return c & COUNT_MASK; }
 //一般用于设置状态并转移线程数，用于advanceRunState方法中。
 private static int ctlOf(int rs, int wc) { return rs | wc; }
 ```
+
 #### 线程池的5个状态
 
 上面的代码是在jdk11里的，线程的池的状态有 `RUNNING`、 `SHUTDOWN`、 `STOP`、 `TIDYING`、 `TERMINATED`
@@ -97,7 +98,7 @@ private static int ctlOf(int rs, int wc) { return rs | wc; }
 - `STOP` -> `TIDYING` ：当线程池为空 
 - `TIDYING` -> `TERMINATED` ：当terminated()钩子方法执行完成 
 
-```
+```java
 public void shutdown() {
         //上锁
         final ReentrantLock mainLock = this.mainLock;
@@ -119,7 +120,7 @@ public void shutdown() {
 }
 ```
 
-```
+```java
 public List<Runnable> shutdownNow() {
         List<Runnable> tasks;
         final ReentrantLock mainLock = this.mainLock;
@@ -142,7 +143,7 @@ public List<Runnable> shutdownNow() {
 
 ```
 
-```
+```java
 final void tryTerminate() {
         for (;;) {
             //获取当前线程池，线程数
@@ -198,7 +199,7 @@ execute()方法主要分为以下四种情况:
 
 #### execute源码
 
-```
+```java
 public void execute(Runnable command) {
     int c = ctl.get();
     //当前线程数与核心线程比较，小于核心线程
@@ -227,7 +228,7 @@ public void execute(Runnable command) {
 
 #### addWorker源码分析
 
-```
+```java
 private boolean addWorker(Runnable firstTask, boolean core) {
         retry:
         for (int c = ctl.get();;) {
@@ -309,14 +310,14 @@ private boolean addWorker(Runnable firstTask, boolean core) {
 
 `ThreadPoolExecutor`里`Worker`是线程的承载者，它继承与`AQS`,实现了`Runnable`的 run（）方法.
 
-```
+```java
     public void run() {
         runWorker(this);
     }
 ```
 
 #### runWorker源码分析
-```
+```java
     final void runWorker(Worker w) {
         Thread wt = Thread.currentThread();
         //获取任务
@@ -370,7 +371,7 @@ private boolean addWorker(Runnable firstTask, boolean core) {
     }
 ```
 #### getTask源码分析
-```
+```java
     private Runnable getTask() {
         boolean timedOut = false; // Did the last poll() time out?
 
@@ -440,14 +441,14 @@ Executors类则扮演着线程池工厂的角色,通过 Executors可以取得一
 并且在任意给定的时间不会有多个线程是活动的 。
 - newScheduleThreadPool：newScheduleThreadPool创建一个定长的线程池，而且支持定时的以及周期性的任务执行，类似于Timer。
                           
-```
+```java
 public static ExecutorService newFixedThreadPool(int nThreads) {
     return new ThreadPoolExecutor(nThreads, nThreads,
                                   0L, TimeUnit.MILLISECONDS,
                                   new LinkedBlockingQueue<Runnable>());
 }
 ```
-```
+```java
 public static ExecutorService newCachedThreadPool() {
     return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                                   60L, TimeUnit.SECONDS,
