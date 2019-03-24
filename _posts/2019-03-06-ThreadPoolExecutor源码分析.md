@@ -52,7 +52,7 @@ corePoolSize 和 maximumPoolSize 有什么关系呢？
 
 #### 常量与状态的源码
 
-```
+```java
 //高3位保存线程池状态，低29位保存线程数
 private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
 //位移29位，即29 = Integer.Size - 3
