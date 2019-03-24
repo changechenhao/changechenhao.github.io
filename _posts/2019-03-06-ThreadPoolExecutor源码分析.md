@@ -17,7 +17,7 @@ tags:
 
 ## 线程构造函数
 
-```html
+```java
 public ThreadPoolExecutor(int corePoolSize,
                           int maximumPoolSize,
                           long keepAliveTime,
@@ -26,6 +26,7 @@ public ThreadPoolExecutor(int corePoolSize,
                           ThreadFactory threadFactory,
                           RejectedExecutionHandler handler)
 ``` 
+
 #### 各参数的意义
 
 - corePoolSize :核心线程的数量
@@ -317,6 +318,7 @@ private boolean addWorker(Runnable firstTask, boolean core) {
 ```
 
 #### runWorker源码分析
+
 ```java
     final void runWorker(Worker w) {
         Thread wt = Thread.currentThread();
@@ -370,7 +372,9 @@ private boolean addWorker(Runnable firstTask, boolean core) {
         }
     }
 ```
+
 #### getTask源码分析
+
 ```java
     private Runnable getTask() {
         boolean timedOut = false; // Did the last poll() time out?
@@ -448,6 +452,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
                                   new LinkedBlockingQueue<Runnable>());
 }
 ```
+
 ```java
 public static ExecutorService newCachedThreadPool() {
     return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
@@ -455,6 +460,7 @@ public static ExecutorService newCachedThreadPool() {
                                   new Synchrono　usQueue<Runnable>());
 }
 ```
+
 newSingleThreadExecutor 与 newScheduleThreadPool 分别被 FinalizableDelegatedExecutorService 与
 ScheduledThreadPoolExecutor 包装。
 
