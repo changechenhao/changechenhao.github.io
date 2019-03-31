@@ -457,7 +457,7 @@ public static ExecutorService newFixedThreadPool(int nThreads) {
 public static ExecutorService newCachedThreadPool() {
     return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                                   60L, TimeUnit.SECONDS,
-                                  new Synchrono　usQueue<Runnable>());
+                                  new SynchronousQueue<Runnable>());
 }
 ```
 
